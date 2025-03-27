@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 
 export default function App() {
 
-  const movies = [
+  const initialMovies = [
     { title: 'Inception', genre: 'Fantascienza' },
     { title: 'Il Padrino', genre: 'Thriller' },
     { title: 'Titanic', genre: 'Romantico' },
@@ -11,9 +11,12 @@ export default function App() {
     { title: 'Pulp Fiction', genre: 'Thriller' },
   ]
 
+  const [movies, setMovies] = useState(initialMovies)
   const [genre, setGenre] = useState('')
   const [filteredmovies, setFilteredMovies] = useState(movies)
   const [title, setTitle] = useState('')
+  const [newMovieTitle, setNewMovieTitle] = useState('')
+  const [newMovieGenre, setNewMovieGenre] = useState('')
 
   useEffect(() => {
 
@@ -30,6 +33,15 @@ export default function App() {
     setFilteredMovies(filtered)
 
   }, [genre, title, movies])
+
+  const handleAddMovie = (e) => {
+    e.preventDefault()
+
+    const newMovie = { title: newMovieTitle, genre: newMovieGenre }
+    setMovies([...movies, newMovie])
+    setNewMovieTitle('')
+    setNewMovieGenre('')
+  }
 
   return (
     <div className="container">
@@ -71,6 +83,41 @@ export default function App() {
             </select>
           </div>
         </div>
+
+        <form onSubmit={handleAddMovie} className="mb-4">
+          <div className="row">
+            <div className="col-md-5">
+              <input
+                value={newMovieTitle}
+                onChange={(e) => setNewMovieTitle(e.target.value)}
+                type="text"
+                className="form-control"
+                placeholder="Titolo del film"
+              />
+            </div>
+            <div className="col-md-5">
+              <select
+                value={newMovieGenre}
+                onChange={(e) => setNewMovieGenre(e.target.value)}
+                className="form-select"
+              >
+                <option value="">Seleziona un genere</option>
+                <option value='Fantascienza'>Fantascienza</option>
+                <option value='Thriller'>Thriller</option>
+                <option value='Romantico'>Romantico</option>
+                <option value='Azione'>Azione</option>
+              </select>
+            </div>
+            <div className="col-md-2">
+              <button
+                type="submit"
+                className="btn btn-primary w-100"
+              >
+                Aggiungi
+              </button>
+            </div>
+          </div>
+        </form>
 
         <div className="row">
           {filteredmovies.map(movie => (
