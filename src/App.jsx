@@ -13,10 +13,23 @@ export default function App() {
 
   const [genre, setGenre] = useState('')
   const [filteredmovies, setFilteredMovies] = useState(movies)
+  const [title, setTitle] = useState('')
 
   useEffect(() => {
-    setFilteredMovies(genre === '' ? movies : movies.filter(movie => genre === movie.genre))
-  }, [genre, movies])
+
+    let filtered = movies
+
+    if (genre !== '') {
+      filtered = filtered.filter(movie => genre === movie.genre);
+    }
+
+    if (title !== '') {
+      filtered = filtered.filter(movie => movie.title.toLocaleLowerCase().includes(title.toLocaleLowerCase()));
+    }
+
+    setFilteredMovies(filtered)
+
+  }, [genre, title, movies])
 
   return (
     <div className="container">
@@ -24,7 +37,22 @@ export default function App() {
       <div className="row">
 
         <div className="mb-3">
-          <label htmlFor="" className="form-label">Movies</label>
+          <label htmlFor="" className="form-label">Titolo</label>
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            type="text"
+            className="form-control"
+            name="title"
+            id="title"
+            aria-describedby="helpId"
+            placeholder="Batman, Interstellar..."
+          />
+        </div>
+
+
+        <div className="mb-3">
+          <label htmlFor="" className="form-label">Genere</label>
           <select
             value={genre}
             onChange={(e) => setGenre(e.target.value)}
